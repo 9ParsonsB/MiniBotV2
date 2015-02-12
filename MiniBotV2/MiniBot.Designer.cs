@@ -35,6 +35,7 @@
             this.btnCall = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.lblUptime = new System.Windows.Forms.Label();
             this.lblConStatus = new System.Windows.Forms.Label();
             this.txtOutput = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -44,7 +45,6 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblUptime = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -108,6 +108,7 @@
             this.btnSend.TabIndex = 0;
             this.btnSend.Text = "Send Message";
             this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // panel2
             // 
@@ -118,6 +119,15 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(151, 63);
             this.panel2.TabIndex = 0;
+            // 
+            // lblUptime
+            // 
+            this.lblUptime.AutoSize = true;
+            this.lblUptime.Location = new System.Drawing.Point(13, 36);
+            this.lblUptime.Name = "lblUptime";
+            this.lblUptime.Size = new System.Drawing.Size(118, 13);
+            this.lblUptime.TabIndex = 1;
+            this.lblUptime.Text = "Uptime: Not Connected";
             // 
             // lblConStatus
             // 
@@ -134,6 +144,7 @@
             this.txtOutput.Location = new System.Drawing.Point(0, 87);
             this.txtOutput.Multiline = true;
             this.txtOutput.Name = "txtOutput";
+            this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtOutput.Size = new System.Drawing.Size(941, 348);
             this.txtOutput.TabIndex = 1;
             // 
@@ -163,6 +174,7 @@
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.connectToolStripMenuItem.Text = "Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // disconnectToolStripMenuItem
             // 
@@ -187,17 +199,8 @@
             // settingsToolStripMenuItem
             // 
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
-            // 
-            // lblUptime
-            // 
-            this.lblUptime.AutoSize = true;
-            this.lblUptime.Location = new System.Drawing.Point(13, 36);
-            this.lblUptime.Name = "lblUptime";
-            this.lblUptime.Size = new System.Drawing.Size(118, 13);
-            this.lblUptime.TabIndex = 1;
-            this.lblUptime.Text = "Uptime: Not Connected";
             // 
             // MiniBot
             // 
@@ -209,6 +212,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Name = "MiniBot";
             this.Text = "MiniBot";
+            this.Load += new System.EventHandler(this.MiniBot_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel3.ResumeLayout(false);
