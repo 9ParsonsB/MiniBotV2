@@ -14,9 +14,9 @@ namespace MiniBotV2
         string Command;
         string[] args;
 
-        public MessageInfo(string Message)
+        public MessageInfo(string message)
         {
-            string newData = Regex.Replace(Message, @"!.+ :", ":");
+            string newData = Regex.Replace(message, @"!.+ :", ":");
             Regex nameExpr = new Regex(@":.*:");
             Match match = nameExpr.Match(newData);
 
@@ -25,7 +25,9 @@ namespace MiniBotV2
                 Name = Regex.Replace(match.Groups[0].Value, ":", "");
             }
 
-            Message = Regex.Replace(newData,":.*:","");
+            message = Regex.Replace(newData,":.*:","");
+
+            Message = message;
 
             Regex ComExpr = new Regex(@"!\w*");
             match = ComExpr.Match(Message);

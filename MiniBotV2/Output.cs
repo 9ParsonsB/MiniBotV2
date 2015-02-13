@@ -5,9 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MiniBotV2
@@ -15,7 +13,6 @@ namespace MiniBotV2
     public class TextBoxWriter : TextWriter
     {
         TextBox _output = null;
-
         public TextBoxWriter(TextBox output)
         {
             _output = output;
