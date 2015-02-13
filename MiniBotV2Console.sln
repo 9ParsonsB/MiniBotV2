@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniBotV2", "MiniBotV2\MiniBotV2.csproj", "{4F0F033F-E8BB-4E30-A96D-4A10F164E1A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniBotV2Console", "MiniBotV2Console\MiniBotV2Console.csproj", "{4E45C4C2-B334-418C-92C3-08A1251C3E36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4F0F033F-E8BB-4E30-A96D-4A10F164E1A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F0F033F-E8BB-4E30-A96D-4A10F164E1A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F0F033F-E8BB-4E30-A96D-4A10F164E1A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F0F033F-E8BB-4E30-A96D-4A10F164E1A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E45C4C2-B334-418C-92C3-08A1251C3E36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E45C4C2-B334-418C-92C3-08A1251C3E36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E45C4C2-B334-418C-92C3-08A1251C3E36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E45C4C2-B334-418C-92C3-08A1251C3E36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

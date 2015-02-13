@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniBotV2
+namespace MiniBotV2Console
 {
-    static class Commands
+    static class AppCode
     {
-        static bool isMod(string user)
+        static Random rnd = new Random();
+        public static bool isMod(string user)
         {
             foreach (var x in Config.Mods)
             {
+                if (user != null)
                 if (user.ToLower() == x.ToLower())
                 {
                     //Console.WriteLine("user is mod");
@@ -22,7 +24,7 @@ namespace MiniBotV2
             return false;
         }
 
-        static bool isIn(string match, string[] list, string looking = "")
+        public static bool isIn(string match, string[] list, string looking = "")
         {
             foreach (var x in list)
             {
@@ -35,5 +37,11 @@ namespace MiniBotV2
             }
             return false;
         }
+
+        public static int GetRandomInt(int min = 1, int max = 3)
+        {
+            return rnd.Next(min, max);
+        }
     }
 }
+

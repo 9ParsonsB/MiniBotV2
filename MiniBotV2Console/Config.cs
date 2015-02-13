@@ -7,26 +7,67 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Windows.Forms;
-namespace MiniBotV2
+namespace MiniBotV2Console
 {
     static class Config
     {
+
+        private static List<Del> _EventList = new List<Del>();
+
         public static readonly ConcurrentQueue<string> _queue = new ConcurrentQueue<string>();
-        private static TextBox _Console;
+
         private static string _BotName = "Mini_B0t";
         private static string _authCode = "oauth:5fobcu1uc7k7c8h291rougwswzzp4eb"; // auth key
         private static string _ConnectionName = "Minijack".ToLower();
+
         private static bool _debugMode = false;
         private static bool _shouldRun = true;
-        private static string[] _mods = { "minijackb", "test" };
+
+        private static string[] _mods = { "minijackb", "" };
+
+        private static string _Prefix;
+        private static ChatMessage _Data;
 
 
-        public static TextBox Console
+
+
+        public static ChatMessage Data
         {
-            get { return _Console; }
-            set { _Console = value;}
+            get { return _Data; }
+            set
+            {
+                if (value.GetType() != new ChatMessage("").GetType())
+                    throw new OverflowException();
+                else
+                    _Data = value;
+            }
         }
+
+
+        public static List<Del> EventList
+        {
+            get { return _EventList; }
+            set
+            {
+                if (value.GetType() != new List<Action>().GetType())
+                    throw new OverflowException();
+                else
+                    _EventList = value;
+            }
+        }
+
+        public static string Prefix
+        {
+            get { return _Prefix; }
+            set
+            {
+                if (value.GetType() != "".GetType())
+                    throw new OverflowException();
+                else
+                    _Prefix = value;
+            }
+        }
+
         public static string ConnectionName
         {
             get { return _ConnectionName; }

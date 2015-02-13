@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MiniBotV2")]
+[assembly: AssemblyTitle("MiniBotV2Console")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MiniBotV2")]
+[assembly: AssemblyProduct("MiniBotV2Console")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("076563b8-c274-4bdf-9cd5-455ffdfa1f89")]
+[assembly: Guid("848e08bf-e93b-44b3-ad4d-1244d8c2ede3")]
 
 // Version information for an assembly consists of the following four values:
 //
