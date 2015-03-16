@@ -9,6 +9,7 @@ namespace MiniBotV2Console
     static class AppCode
     {
         static Random rnd = new Random();
+
         public static bool isMod(string user)
         {
             foreach (var x in Config.Mods)

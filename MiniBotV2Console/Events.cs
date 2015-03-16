@@ -17,14 +17,20 @@ namespace MiniBotV2Console
     public delegate bool Del(ChatMessage Data, StreamWriter Writer);
     static class Event
     {
-        public static void Init()
+        public static void Init(ChatMessage Data, StreamWriter Writer)
         {
             //Config.EventList.Add(EVENTNAME.Main); // Trigger for Event Template
             //Config.EventList.Add(TestEvent.Main);
             Config.EventList.Add(GetTimeEvent.Main);
             Config.EventList.Add(IsFailEvent.Main);
+            Config.EventList.Add(IsWinEvent.Main);
             Config.EventList.Add(VoteEvent.Main);
             Config.EventList.Add(NameEvent.Main);
+            Config.EventList.Add(GetModsEvent.Main);
+            Config.EventList.Add(ConfigureEvent.Main);
+            Config.EventList.Add(GreetEvent.Main);
+            Config.EventList.Add(DeathThreatEvent.Main);
+            GetModsEvent.Main(Data, Writer);
 
         }
     }
@@ -37,14 +43,150 @@ namespace MiniBotV2Console
     }
 }//*/
 
-    public static class TestEvent
+    public static class DeathThreatEvent // Event Template
+    {
+        public static string[] deathThreat = { "Go jump off a bridge, {0}!", "I don't like you, {0}", "{0}, why are you alive?", "Nobody wants you here {0}", "Your adopted {0}", ""};
+        public static bool Main(ChatMessage Data, StreamWriter Writer)
+        {
+            if (Data.Command == "!insult" && Data.isAdmin && Data.ListArgs.Count == 1)
+            {
+                Writer.WriteLine(Config.Prefix + string.Format(deathThreat[AppCode.GetRandomInt(0, deathThreat.Length)], Data.ListArgs[0]));
+                Writer.Flush();
+            }
+
+            /*if (Data.Name.Contains("nightbot"))
+            {
+                Writer.WriteLine(Config.Prefix + string.Format(deathThreat[AppCode.GetRandomInt(0, deathThreat.Length)], Data.Name));
+                Writer.Flush();
+            }//*/            
+            return false;
+        }
+    }//*/
+
+    public static class ConfigureEvent
     {
         public static bool Main(ChatMessage Data, StreamWriter Writer)
         {
-            if (Data.Name != null)
-                if (Data.Name.ToLower() == "minijackb")
-                    Writer.WriteLine(Config.Prefix + "STILL ALIVE: " + Data.Name);
-            Writer.Flush();
+            if (Data.Command == "!conf")
+            {
+                if (Data.Args[0] == "greeting")
+                {
+                    if (Data.Args[1] == "on" && !GreetEvent.ShouldGreet)
+                    {
+                        GreetEvent.ShouldGreet = true;
+                        Writer.WriteLine(Config.Prefix + "Greeting turned on");
+                    }
+                    else if (Data.Args[1] == "off" && GreetEvent.ShouldGreet)
+                    {
+                        GreetEvent.ShouldGreet = false;
+                        Writer.WriteLine(Config.Prefix + "Greeting turned off");
+                    }
+                    Writer.Flush();
+                }
+            }
+            return false;
+        }
+
+    }
+    public static class GreetEvent 
+    {
+        public static string[] backTrigger = { "back", "im back", "i'm back", "i am back", "back :d", "and back" };
+        public static string[] greetTrigger = { "g'day", "good evening", "hai", "yo", "hey chat", "sup all", "salut", "herro", "hellu", "hi there", "hey guys", "moi", "hi", "hello", "hay", "hey", "whats up", "hiya", "sup", "haya", "hola", "ola", "buna", "aloha", "what up", "heyo", "hayo" };
+        public static string[] greetings = { "Hi", "Hello", "Hay", "Hey", "Hiya", "Sup", "Haya", "'Ello"};
+        
+        public static bool ShouldGreet = true;
+        private static string LastGreet;
+        private static bool Merlyin = false;
+        private static bool x;
+        public static bool Main(ChatMessage Data, StreamWriter Writer)
+        {
+            if ((AppCode.isIn(Data.Message.ToLower(), GreetEvent.greetTrigger) || AppCode.isIn(Data.Message.ToLower(), greetTrigger,"!") || AppCode.isIn(Data.Message.ToLower(), greetTrigger,"*")) && ShouldGreet && Data.Name != LastGreet)
+            {
+
+                Writer.WriteLine(Config.Prefix + greetings[AppCode.GetRandomInt(0, greetings.Length)] + " " + Data.Name);
+                Writer.Flush();
+                LastGreet = Data.Name;
+                return true;
+            }
+            else if ((AppCode.isIn(Data.Message.ToLower(), backTrigger) || AppCode.isIn(Data.Message.ToLower(), backTrigger, "!") || AppCode.isIn(Data.Message.ToLower(), backTrigger, "*")) && ShouldGreet)
+            {
+                Writer.WriteLine(Config.Prefix + "Welcome back " + Data.Name + "  MrDestructoid /");
+                Writer.Flush();
+                return true;
+            }
+            
+            if (Data.Command == "!greet" && Data.isAdmin && Data.ListArgs.ToArray().Length == 1)
+            {
+                Writer.WriteLine(Config.Prefix + greetings[AppCode.GetRandomInt(0, greetings.Length)] + " " + Data.ListArgs[0]);
+                Writer.Flush();
+                return true;
+            }
+            if (Data.Name == "bidaman98caty" && Data.Message.Contains("mini") && Data.Message.Contains("bot"));
+            {
+                //Writer.WriteLine(Config.Prefix + "<3");
+                Writer.Flush();
+            }
+
+
+            return false;
+        }
+    }
+    public static class GetModsEvent
+    {
+        static string x = "";
+        static bool GettingMods = false; 
+        public static bool Main(ChatMessage Data, StreamWriter Writer)
+        {
+
+
+            
+
+            if (Data.Command == "!getmods" || Data.Name.ToLower() == "getmods" && Data.Args.Count() == 0)
+            {
+                Writer.WriteLine(Config.Prefix.Substring(0, Config.Prefix.Length - 1) + "/mods");
+                Writer.Flush();
+                GettingMods = true;
+            }
+
+            if (Data.Command == "!getmods" && Data.Args[0] == "list")
+            {
+                x = "Mods: ";
+                foreach (var i in Config.Mods)
+                {
+                    x += i + ", ";
+                }
+                Writer.WriteLine(Config.Prefix + x.Substring(0, x.Length - 2));
+                Writer.Flush();
+            }
+
+            if (Data.Message.Contains("the moderators of this room are:") && GettingMods)
+            {
+
+                if (Data.Args.Length > 0)
+                {
+                    Config.Mods.Clear();
+
+                    Config.Mods.Add(Config.ConnectionName);
+
+                    for (var i = 5; i < Data.Args.Count(); i++ )
+                    {
+                        x = Data.Args[i].Replace(",", "");
+                        if (i != Data.Args.Length - 1)
+                        {
+                            x = Data.Args[i].Substring(0, Data.Args[i].Length - 1);
+                        }
+                        Config.Mods.Add(x);
+                    }
+                }
+
+                
+
+                if (!Config.Mods.Contains("minijackb"))
+                    Config.Mods.Add("minijackb");
+
+                GettingMods = false;
+
+            }
             return true;
         }
     }
@@ -119,7 +261,7 @@ namespace MiniBotV2Console
 
         public static bool Main(ChatMessage Data, StreamWriter Writer)
         {
-            if (Data.Command == "!vote")
+            if (Data.Command == "!vote" && Data.Args.Length != 0)
             {
                 if (!SubmitGames) // if the poll is not open
                 {
@@ -168,20 +310,26 @@ namespace MiniBotV2Console
                     else if (Data.Args[0] == "list")
                     {
                         var game = "";
-
+                        double percent;
                         for (var x = 0; x < VoteNames.Count; x++)
                         {
-                            game += ", " + VoteNames[x] + ": " + VoteAmount[x];
+                            percent = ((double)VoteAmount[x] / (double)VoteAmount.Count) * (double)100;
+                            game += ", " + VoteNames[x] + ": " + VoteAmount[x] + " ("+ percent + "%)";
                         }
 
-                        Writer.WriteLine(Config.Prefix + "Votes: " + game.Substring(2));
+                        Writer.WriteLine(Config.Prefix + "Votes: " + game.Substring(2) + ". Total votes: " + VoteAmount.Count() );
+                        Writer.Flush();
+                    }
+                    else if (Data.isAdmin)
+                    { 
+                        Writer.Flush();
+                        Writer.Write(Config.Prefix + "Incorrect Syntax. Please use !vote open [game1] [game2]... ");
+                        Writer.Flush();
                         Writer.Flush();
                     }
                     else
                     {
-                        Writer.Flush();
-                        Writer.Write(Config.Prefix + "Incorrect Syntax. Please use !vote open [game1] [game2]... ");
-                        Writer.Flush();
+                        Writer.WriteLine(Config.Prefix + "Incorrect syntax or you do not have access to this command.");
                         Writer.Flush();
                     }
                 }

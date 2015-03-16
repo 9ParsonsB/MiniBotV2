@@ -23,13 +23,36 @@ namespace MiniBotV2Console
         private static bool _debugMode = false;
         private static bool _shouldRun = true;
 
-        private static string[] _mods = { "minijackb", "" };
+        private static List<string> _Mods = new List<string>();
 
         private static string _Prefix;
         private static ChatMessage _Data;
 
+        private static bool _EventsEnabled = true;
 
+        public static bool EventsEnabled
+        {
+            get { return _EventsEnabled; }
+            set
+            {
+                if (value.GetType() != _EventsEnabled.GetType())
+                    throw new OverflowException();
+                else
+                    _EventsEnabled = value;
+            }
+        }
 
+        public static List<string> Mods
+        {
+            get { return _Mods; }
+            set
+            {
+                if (value.GetType() != new List<string>().GetType())
+                    throw new OverflowException();
+                else
+                    _Mods = value;
+            }
+        }
 
         public static ChatMessage Data
         {
@@ -108,6 +131,5 @@ namespace MiniBotV2Console
 
         public static string authCode { get { return _authCode; } set { } }
 
-        public static string[] Mods { get { return _mods; } set { } }
     }
 }
