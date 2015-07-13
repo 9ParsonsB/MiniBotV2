@@ -17,8 +17,8 @@ namespace MiniBotV2Console
         public static readonly ConcurrentQueue<string> _queue = new ConcurrentQueue<string>();
 
         private static string _BotName = "Mini_B0t";
-        private static string _authCode = "oauth:5fobcu1uc7k7c8h291rougwswzzp4eb"; // auth key
-        private static string _ConnectionName = "Minijack".ToLower();
+        private static string _authCode = "oauth:0r02okasmxn5j9ushgw2pi1w8ffhiv"; // auth key
+        private static string _ConnectionName = "Twitchingtophats".ToLower();
 
         private static bool _debugMode = false;
         private static bool _shouldRun = true;

@@ -20,7 +20,7 @@ namespace MiniBotV2Console
         static NetworkStream NwStream;
         static StreamWriter Writer;
         static StreamReader Reader;
-        static string channel = "minijackb";
+        static string channel = "TWITCHINGTOPHATS";
 
         static void Main(string[] args)
         {
@@ -52,7 +52,9 @@ namespace MiniBotV2Console
 
             int Loop = 0;
 
-            Data = new ChatMessage(":getmods!getmods@getmods.tmi.twitch.tv PRIVMSG #getmods : getmods");
+            Config.Mods.Add("crhybrid");
+
+            Data = new ChatMessage(":getmods!getmods@getmods.tmi.twitch.tv PRIVMSG #" + Config.ConnectionName + " : !getmods");
 
             Event.Init(Data,Writer);
 
@@ -67,10 +69,11 @@ namespace MiniBotV2Console
                         Console.WriteLine(rawdata);
                         
                         Data = new ChatMessage(rawdata);
-                        //Console.WriteLine(Data.Name + ": " + Data.Message);
+                        Console.WriteLine(Data.Name + ": " + Data.Message);
 
                         if (!rawdata.Contains(":tmi.twitch.tv") && Data.Name != null && (Config.EventsEnabled || rawdata.Contains(":jtv!jtv@jtv.tmi.twitch.tv PRIVMSG mini_b0t :The moderators of this room are:")))
                         {
+                            if (Data != null)
                             foreach (var i in Config.EventList)
                             {
                                 i(Data, Writer);

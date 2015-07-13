@@ -26,11 +26,11 @@ namespace MiniBotV2Console
             Config.EventList.Add(IsWinEvent.Main);
             Config.EventList.Add(VoteEvent.Main);
             Config.EventList.Add(NameEvent.Main);
-            Config.EventList.Add(GetModsEvent.Main);
+            //Config.EventList.Add(GetModsEvent.Main);
             Config.EventList.Add(ConfigureEvent.Main);
             Config.EventList.Add(GreetEvent.Main);
             Config.EventList.Add(DeathThreatEvent.Main);
-            GetModsEvent.Main(Data, Writer);
+            //GetModsEvent.Main(Data, Writer);
 
         }
     }
@@ -45,10 +45,11 @@ namespace MiniBotV2Console
 
     public static class DeathThreatEvent // Event Template
     {
-        public static string[] deathThreat = { "Go jump off a bridge, {0}!", "I don't like you, {0}", "{0}, why are you alive?", "Nobody wants you here {0}", "Your adopted {0}", ""};
+        public static string[] deathThreat = { "Go jump off a bridge, {0}!", "I don't like you, {0}", "Your adopted {0}", ""};
         public static bool Main(ChatMessage Data, StreamWriter Writer)
         {
-            if (Data.Command == "!insult" && Data.isAdmin && Data.ListArgs.Count == 1)
+            
+            if (Data.Command == "!insult" /*&& Data.isAdmin*/ && Data.ListArgs.Count == 1)
             {
                 Writer.WriteLine(Config.Prefix + string.Format(deathThreat[AppCode.GetRandomInt(0, deathThreat.Length)], Data.ListArgs[0]));
                 Writer.Flush();
@@ -100,6 +101,7 @@ namespace MiniBotV2Console
         private static bool x;
         public static bool Main(ChatMessage Data, StreamWriter Writer)
         {
+            if (Data.Message != null)
             if ((AppCode.isIn(Data.Message.ToLower(), GreetEvent.greetTrigger) || AppCode.isIn(Data.Message.ToLower(), greetTrigger,"!") || AppCode.isIn(Data.Message.ToLower(), greetTrigger,"*")) && ShouldGreet && Data.Name != LastGreet)
             {
 
@@ -134,60 +136,65 @@ namespace MiniBotV2Console
     public static class GetModsEvent
     {
         static string x = "";
-        static bool GettingMods = false; 
-        public static bool Main(ChatMessage Data, StreamWriter Writer)
+        static bool GettingMods = false;
+        public static bool Main( ChatMessage Data, StreamWriter Writer )
         {
 
 
-            
 
-            if (Data.Command == "!getmods" || Data.Name.ToLower() == "getmods" && Data.Args.Count() == 0)
+            if (Data.Command != null)
             {
-                Writer.WriteLine(Config.Prefix.Substring(0, Config.Prefix.Length - 1) + "/mods");
-                Writer.Flush();
-                GettingMods = true;
-            }
-
-            if (Data.Command == "!getmods" && Data.Args[0] == "list")
-            {
-                x = "Mods: ";
-                foreach (var i in Config.Mods)
+                if ((Data.Command == "!getmods" || Data.Name.ToLower() == "getmods") && Data.Args.Count() == 0)
                 {
-                    x += i + ", ";
+                    Writer.WriteLine(Config.Prefix.Substring(0, Config.Prefix.Length - 1) + "/mods");
+                    Writer.Flush();
+                    GettingMods = true;
                 }
-                Writer.WriteLine(Config.Prefix + x.Substring(0, x.Length - 2));
-                Writer.Flush();
-            }
-
-            if (Data.Message.Contains("the moderators of this room are:") && GettingMods)
-            {
-
-                if (Data.Args.Length > 0)
+                else
+                if (Data.Command == "!getmods" && Data.Args[0] == "list")
                 {
-                    Config.Mods.Clear();
-
-                    Config.Mods.Add(Config.ConnectionName);
-
-                    for (var i = 5; i < Data.Args.Count(); i++ )
+                    x = "Mods: ";
+                    foreach (var i in Config.Mods)
                     {
-                        x = Data.Args[i].Replace(",", "");
-                        if (i != Data.Args.Length - 1)
-                        {
-                            x = Data.Args[i].Substring(0, Data.Args[i].Length - 1);
-                        }
-                        Config.Mods.Add(x);
+                        x += i + ", ";
                     }
+                    Writer.WriteLine(Config.Prefix + x.Substring(0, x.Length - 2));
+                    Writer.Flush();
                 }
+                else
+                if (Data.Message.Contains("the moderators of this room are:") && GettingMods)
+                {
 
-                
+                    if (Data.Args.Length > 0)
+                    {
+                        Config.Mods.Clear();
 
-                if (!Config.Mods.Contains("minijackb"))
-                    Config.Mods.Add("minijackb");
+                        Config.Mods.Add(Config.ConnectionName);
 
-                GettingMods = false;
+                        for (var i = 5; i < Data.Args.Count(); i++)
+                        {
+                            x = Data.Args[i].Replace(",", "");
+                            if (i != Data.Args.Length - 1)
+                            {
+                                x = Data.Args[i].Substring(0, Data.Args[i].Length - 1);
+                            }
+                            Config.Mods.Add(x);
+                        }
+                    }
 
+
+
+                    if (!Config.Mods.Contains("minijackb"))
+                        Config.Mods.Add("minijackb");
+                    if (!Config.Mods.Contains("crhybrid"))
+                        Config.Mods.Add("crhybrid");
+
+                    GettingMods = false;
+
+                }
+                return true;
             }
-            return true;
+            return false;
         }
     }
 
@@ -401,13 +408,13 @@ namespace MiniBotV2Console
 
         public static bool Main(ChatMessage Data, StreamWriter Writer)
         {
-            if (Data.Command == "!name")
+            if (Data.Command == "!link")
             {
                 if (!SubmitNames)
                 {
                     if (Data.Args[0] == "open" && Data.isAdmin)
                     {
-                        Writer.WriteLine(Config.Prefix + "You can now submit names using \"!name [Name]\"");
+                        Writer.WriteLine(Config.Prefix + "You can now submit links using \"!link [link]\"");
                         Writer.Flush();
                         SubmitNames = true;
                         Users.Clear();
@@ -420,7 +427,7 @@ namespace MiniBotV2Console
                         {
                             Message += ", " + i + " (" + Users[Names.IndexOf(i)] + ")";
                         }
-                        Writer.WriteLine(Config.Prefix + "List of names submitted: " + Message.Substring(2));
+                        Writer.WriteLine(Config.Prefix + "List of links submitted: " + Message.Substring(2));
                         Writer.Flush();
                     }
                 }
@@ -429,15 +436,30 @@ namespace MiniBotV2Console
                     if (Data.Args[0] == "close" && Data.isAdmin)
                     {
                         SubmitNames = false;
-                        Writer.WriteLine(Config.Prefix + "You can no longer submit names!");
+                        Writer.WriteLine(Config.Prefix + "You can no longer submit links!");
                         Writer.Flush();
                         var Message = "";
                         foreach (var i in Names)
                         {
                             Message += ", " + i + " (" + Users[Names.IndexOf(i)] + ")";
                         }
-                        Writer.WriteLine(Config.Prefix + "List of names submitted: " + Message.Substring(2));
+                        Writer.WriteLine(Config.Prefix + "List of links submitted: " + Message.Substring(2));
                         Writer.Flush();
+                    }
+                    else if (Data.Args[0] == "remove" && Data.isAdmin)
+                    {
+                        if (Data.Args[1] != null)
+                        if (Names.Remove(Data.Args[1]))
+                        {
+                            Writer.WriteLine(Config.Prefix + "That entry was removed");
+                            Writer.Flush();
+                        }
+                        else
+                        {
+                            Writer.WriteLine(Config.Prefix + "I could not find that entry, ", Data.Name);
+                            Writer.Flush();
+                        }
+
                     }
                     else
                     {
@@ -448,7 +470,7 @@ namespace MiniBotV2Console
                             if (!Users[Names.IndexOf(temp)].Contains(Data.Name)) { Users[Names.IndexOf(temp)] += ", " + Data.Name; }
                             else
                             {
-                                Writer.WriteLine(Config.Prefix + Data.Name + ", you have already submitted that name!");
+                                Writer.WriteLine(Config.Prefix + Data.Name + ", you have already submitted that link!");
                                 Writer.Flush();
                             }
                         }

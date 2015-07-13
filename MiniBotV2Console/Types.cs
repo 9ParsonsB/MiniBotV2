@@ -24,19 +24,24 @@ namespace MiniBotV2Console
         public string[] Args;
         public List<string> ListArgs;
 
-        public ChatMessage(string message)
+        public ChatMessage( string message )
         {
             Raw = message;
             message = message.ToLower();
-            string newData = Regex.Replace(message, @"!.+ :", ":");
-            Regex nameExpr = new Regex(@":.*:"); // TODO: fix bug where if there is a colon in the message, messes up name detection and cuts out bits of the message.
 
-            Regex testExpr = new Regex(@":.+privmsg");
-            Regex MessageExpr = new Regex(@":.+");
+            //string newData = Regex.Replace(message, @"!.+ :", ":");
 
-            Match match = nameExpr.Match(newData);
+            Regex nameExpr1 = new Regex(@":.*!.*@.*\."); // TODO: fix bug where if there is a colon in the message, messes up name detection and cuts out bits of the message.
+            Regex nameExpr2 = new Regex(@":.*!");
 
-            Match newMatch = testExpr.Match(message);
+            Regex MessageExpr1 = new Regex(@".tv PRIVMSG #" + Config.ConnectionName + " :.+");
+
+            string messageLengthPadding = ".tv PRIVMSG #" + Config.ConnectionName + " :";
+
+            Match nameMatch1 = nameExpr1.Match(Raw);
+
+            Match messageMatch = MessageExpr1.Match(Raw);
+            Match nameMatch2;
 
             string FormattedData;
 
@@ -45,21 +50,40 @@ namespace MiniBotV2Console
 
             }
 
-            if (newMatch.Success)
+            if (nameMatch1.Success)
             {
-                FormattedData = (message.Substring(newMatch.Groups[0].Value.Length + 2)); //Give output of "name :message"
+                nameMatch2 = nameExpr2.Match(nameMatch1.Groups[0].ToString());
+                //Console.WriteLine("namematch2 : " + nameMatch2.Groups[0].ToString());
 
-                newMatch = MessageExpr.Match(FormattedData);
+                if (nameMatch2.Success)
+                {
+                    //Console.WriteLine("match: " + nameMatch2.Groups[0]);
 
-               
+                    Name = (nameMatch2.Groups[0].ToString().Substring(1, nameMatch2.Groups[0].Length - 2));
+                    //Console.WriteLine("name: " + Name);
 
-                Message = (newMatch.Groups[0].Value.Substring(1));
-                Name = (FormattedData.Substring(0, FormattedData.Length - Message.Length - 2));
-                Name = (Name.Substring(0, 1).ToUpper() + Name.Substring(1));
+                    if (messageMatch.Success)
+                    {
+                        Message = messageMatch.Groups[0].ToString().Substring(messageLengthPadding.Length);
+                    }
 
-                Console.WriteLine(Command);
+
+                    /*
+                    Console.WriteLine(messageMatch.Groups[0].ToString());
+                    FormattedData = (message.Substring(nameMatch2.Groups[0].Value.Length)); //Give output of "name :message"
+
+                    messageMatch = MessageExpr.Match(FormattedData);
+                    //*/
+
+
+                    //Message = (messageMatch.Groups[0].Value.Substring(1));
+                    //Name = (FormattedData.Substring(0, FormattedData.Length - Message.Length - 2));
+                    //Name = (Name.Substring(0, 1).ToUpper() + Name.Substring(1));
+
+                    //Console.WriteLine(Command);
+                }
+
             }
-
 
 
             /*if (match.Success)
@@ -73,16 +97,16 @@ namespace MiniBotV2Console
             if (Message != null)
             {
                 Regex ComExpr = new Regex(@"!\w+");
-                match = ComExpr.Match(Message);
+                messageMatch = ComExpr.Match(Message);
 
-                if (match.Success || Message.Contains("the moderators of this room are:"))
+                if (messageMatch.Success || Message.Contains("the moderators of this room are:"))
                 {
-                    Command = match.Groups[0].Value;
+                    Command = messageMatch.Groups[0].Value;
                     Command = Regex.Replace(Command, " ", "");
                 }//*/
 
 
-            
+
                 Args = Message.Split(' ');
                 List<string> tempArgs = new List<string>();
                 for (var i = 1; i < Args.Length; i++)
@@ -95,7 +119,7 @@ namespace MiniBotV2Console
                 this.isAdmin = AppCode.isMod(this.Name.ToLower());
             }
 
-            
+
 
         }
     }
